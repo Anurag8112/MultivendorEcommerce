@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MultivendorEcommerce.Interface;
 
 namespace MultivendorEcommerce.Controllers
@@ -18,8 +17,16 @@ namespace MultivendorEcommerce.Controllers
         [Route("api/v1/Vendor/Popular")]
         public IActionResult GetPopularVendor()
         {
-            var popularvendor= vendorRepository.GetPopularVendors();
+            var popularvendor = vendorRepository.GetPopularVendors();
             return Ok(popularvendor);
+        }
+
+        [HttpGet]
+        [Route("api/v1/Vendor/Recommended")]
+        public IActionResult GetRecommendedVendor()
+        {
+            var recommendedvendor = vendorRepository.GetRecommendedVendor();
+            return Ok(recommendedvendor);
         }
     }
 }
