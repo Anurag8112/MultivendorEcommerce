@@ -19,6 +19,8 @@ namespace MultivendorEcommerce.DAL.Dbmodels
 
         public virtual DbSet<VendorDetail> VendorDetails { get; set; }
         public virtual DbSet<VendorType> VendorTypes { get; set; }
+        public virtual DbSet<Gender> Genders { get; set; }
+        public virtual DbSet<UserMaster> UserMasters { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -73,6 +75,22 @@ namespace MultivendorEcommerce.DAL.Dbmodels
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<UserMaster>(entity =>
+            {
+                entity.ToTable("UserMaster");
+
+                entity.HasOne(u => u.Gender)
+                .WithMany(g => g.UserMaster)
+                .HasForeignKey(u => u.GenderId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_UserMaster_Gender");
+            });
+
+            modelBuilder.Entity<Gender>(entity =>
+            {
+                entity.ToTable("Gender");
             });
 
             OnModelCreatingPartial(modelBuilder);

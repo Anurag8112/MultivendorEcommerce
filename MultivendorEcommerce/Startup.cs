@@ -9,9 +9,13 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using MultivendorEcommerce.Interface;
+using MultivendorEcommerce.Mapper;
 using MultivendorEcommerce.Repository;
+using MultivendorEcommerce.Shared;
+using NLog;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,6 +25,7 @@ namespace MultivendorEcommerce
     {
         public Startup(IConfiguration configuration)
         {
+            LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
             Configuration = configuration;
         }
 
@@ -31,6 +36,9 @@ namespace MultivendorEcommerce
         {
             services.AddDbContext<DbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<ILoggerManager, LoggerManager>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserMapper, UserMapper>();
             services.AddScoped<IVendorRepository, VendorRepository>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
